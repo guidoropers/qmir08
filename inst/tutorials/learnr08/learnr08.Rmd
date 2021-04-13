@@ -31,7 +31,7 @@ For the following exercises, you'll only need the **tidyverse** package. All oth
 
 ```
 
-```{r load-packages-sol}
+```{r load-packages-solution}
 library(tidyverse)
 ```
 
