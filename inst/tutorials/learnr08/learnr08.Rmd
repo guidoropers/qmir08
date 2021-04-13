@@ -1,6 +1,10 @@
 ---
-title: "LearnR Exercises - Week 08 - Bivariate Regression"
-output: learnr::tutorial
+title: "Week 08 - Bivariate Regression"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: false
+    css: "css/learnr-theme.css"
 runtime: shiny_prerendered
 ---
 
@@ -13,23 +17,47 @@ library(tidyverse)
 data(df_opposition) 
 ```
 
-## Getting to know your data
+## Introduction
 
-After getting to know `R` and the `tidyverse` in previous weeks, it's now time to run your first statistical model. Before doing so , you have to load the data and should get familiar with it. Luckily, the data set is already preloaded and called `df_opposition`. It is the same data on opposition parties in national European parliaments that we used in the lab. Let's check it out. 
+After getting to know `R` and the `tidyverse` in previous weeks, it's now time to run your first statistical model. Following this week's lab session, you continue wondering why opposition parties in European national parliaments vary in their conflict-seeking behavior. Luckily, we have the data from Tuttnauer (2018) which allows us to explore the behavior of parliamentary opposition parties in 16 EU member states.^[Tuttnauer, O. (2018) "If you can beat them, confront them: Party-level analysis of opposition behavior in European national parliaments". *European Union Politics*, 19(2), 278–298.] 
+
+Before doing so, however, you have to load the required packages. Moreover, you should also familiarize yourself with the data first. 
+
+### Packages
+
+For the following exercises, you'll only need the **tidyverse** package. All other functions should come with base `R`. You should already have `tidyverse` installed, so just go ahead and load it:
+
+```{r load-packages, exercise=TRUE}
+
+```
+
+```{r load-packages-sol}
+library(tidyverse)
+```
+
+```{r load-packages-check}
+grade_this_code("The tidyverse is now loaded!")
+```
+
+## Getting to know the data
+
+As mentioned before, the data for this tutorial is the same data on opposition parties in national European parliaments that we used in the lab. The data set is already preloaded into the environment and called `df_opposition`. Let's check it out.
+
+### The data set
 
 **How many observations and variables does the data frame have?**
 
-```{r check_data_sol,echo = FALSE, eval=FALSE}
+```{r check-data-sol,echo = FALSE, eval=FALSE}
 dim(df_opposition)
 ```
 
 
-```{r check_data, exercise = TRUE}
+```{r check-data, exercise = TRUE}
 
 ```
 
 
-```{r check_data_q1, echo = FALSE}
+```{r check-data-q1, echo = FALSE}
 question_text("Enter the number of observations here:",
   answer("54", correct = T),
   allow_retry = T,
@@ -39,7 +67,7 @@ question_text("Enter the number of observations here:",
 ```
 
 
-```{r check_data_q2, echo = FALSE}
+```{r check-data-q2, echo = FALSE}
 question_text("Enter the number of variables here:",
   answer("17", correct = T),
   allow_retry = T,
@@ -48,22 +76,25 @@ question_text("Enter the number of variables here:",
 
 ```
 
+### Dependent variable: Voting against the government
  
 As in the lab session, we want to better understand why and how often opposition parties vote against the government. Hence, the  percentage of votes opposed to the government is our dependent variable. The corresponding variable in the data set is called `conflict_p`. 
 
-**What is the median value of this variable (in percent and rounded to two meaningful (non-zero) digits (e.g., 0.23, 4.5, 13))?**
+#### Summary statistics
+
+**What is the median value of this variable (in percent and rounded to two meaningful (integer) digits (e.g., 0.23, 4.5, 13))?**
 
 
-```{r median_conflict_sol, echo = FALSE, eval=FALSE}
+```{r median-conflict-sol, echo = FALSE, eval=FALSE}
 median(df_opposition$conflict_p)
 ```
 
-```{r median_conflict, exercise = TRUE}
+```{r median-conflict, exercise = TRUE}
 
 ```
 
 
-```{r median_conflict_q, echo = FALSE}
+```{r median-conflict-q, echo = FALSE}
 question("The median  of the conflict measure is (in percent and rounded to two meaningful digits):",
   answer("54", correct = T),
   answer("0.5", correct = F, message = "Please report the result in percent and rounded to two digits."),
@@ -78,17 +109,17 @@ question("The median  of the conflict measure is (in percent and rounded to two 
 ```
 
 
-**What is its standard deviation (in percent and rounded to two meaningful (non-zero) digits (e.g., 0.23, 4.5, 13))?**
+**What is its standard deviation (in percent and rounded to two meaningful (integer) digits (e.g., 0.23, 4.5, 13))?**
 
-```{r sd_conflict-sol, echo = FALSE, eval=FALSE}
+```{r sd-conflict-sol, echo = FALSE, eval=FALSE}
 sd(df_opposition$conflict_p) %>% round(2)*100
 ```
 
-```{r sd_conflict, exercise = TRUE}
+```{r sd-conflict, exercise = TRUE}
 
 ```
 
-```{r sd_conflict_q, echo = FALSE}
+```{r sd-conflict-q, echo = FALSE}
 question_text(
   "The standard deviation of the conflict measure is (in percent and rounded to two meaningful digits):",
   answer("0.27", correct = F, message = "Close, but you were asked to report the result in percent."),
@@ -97,21 +128,20 @@ question_text(
 )
 ```
 
+### Independent variable: Party's seat share
 
-Let's find out whether larger opposition parties oppose the government more often than smaller ones. As a proxy for party size we are taking its seat share in the parliament stored in the variable `seatshare`. Before we run the regression analysis, we should know how the variable looks like.
+One common argument in the literature on opposition parties is that larger opposition parties oppose the government more often than smaller ones. Let's have a closer look at this hypothesis. As a proxy for party size we are taking its seat share in the parliament stored in the variable `seatshare`. Before we run the regression analysis, however, we should know how the variable looks like.
 
 * **Have a look at the variable using a histogram.**
-* **Make the plot look nicer by using the `theme_minimal`.**
-
-*(Note: This task is only meant to help you familiarize yourself with the data but won't count to your final exercise score.)*
+* **Make the plot look nicer by using `theme_minimal()`.**
 
 ```{r histogram, exercise = TRUE}
 
 ```
 
 ```{r histogram-solution}
-ggplot(df_opposition, aes(seatshare)) + 
-  geom_histogram() + 
+ggplot(df_opposition) + 
+  geom_histogram(aes(x = seatshare)) + 
   theme_minimal() 
 ```
  
@@ -119,19 +149,21 @@ ggplot(df_opposition, aes(seatshare)) +
 grade_code()
 ```
 
+#### Summary statistics
+
 Now that you got a first visual glimpse at the explanatory variable, let's calculate some summary statistics.
 
 **What is the average value of `seatshare` in the data (in percent and rounded to two non-zero digits)?**
 
-```{r avg_seatshare-sol, eval=FALSE, echo = FALSE}
+```{r avg-seatshare-sol, eval=FALSE, echo = FALSE}
 mean(df_opposition$seatshare) %>% round(2)*100
 ```
 
-```{r avg_seatshare, exercise = TRUE}
+```{r avg-seatshare, exercise = TRUE}
 
 ```
 
-```{r avg_seatshare_q, echo = FALSE}
+```{r avg-seatshare-q, echo = FALSE}
 question_text(
   "The average value of `seatshare` is (in percent and rounded to two meaningful digits):",
   answer("12", correct = T),
@@ -141,17 +173,17 @@ question_text(
 
 **What is the maximum of `seatshare` (in percent and rounded to two meaningful digits)?**
 
-```{r max_seatshare_sol, echo = FALSE, eval=FALSE}
+```{r max-seatshare-sol, echo = FALSE, eval=FALSE}
 max(df_opposition$seatshare) %>% round(2)*100
 ```
 
 
-```{r max_seatshare, exercise = TRUE}
+```{r max-seatshare, exercise = TRUE}
 
 ```
 
 
-```{r max_seatshare_q, echo = FALSE}
+```{r max-seatshare-q, echo = FALSE}
 question_text(
   "The maximum seat share of an opposition party in the data is (in percent and rounded to two meaningful digits):",
   answer("41", correct = T),
@@ -163,11 +195,11 @@ question_text(
 
 Time to run the regression. Regress the average opposition measure (`conflict_p`) on a party's seat share (`seatshare`) using the data set `df_opposition`.
 
-```{r lm_1_sol, eval=FALSE, echo = FALSE}
+```{r lm-1-sol, eval=FALSE, echo = FALSE}
 lm(conflict_p ~ seatshare, data = df_opposition)
 ```
 
-```{r lm_1, exercise = TRUE}
+```{r lm-1, exercise = TRUE}
 
 ```
 
@@ -175,10 +207,10 @@ Please provide an interpretation of the estimated regression coefficient.
 
 *Note that more than one answer can be correct.*
 
-```{r qlm_1_q, echo = FALSE}
+```{r qlm-1-q, echo = FALSE}
 question("What does the coefficient estimate tell us about the relationship between seat share and the share of opposing votes to the government?",
   answer("A one unit increase in seat share is associated with an increase of about 56% in votes against the government.", correct = F, message = "Keep in mind that reporting increases in percent is a relative measure. However, the dependent variable is measured in percentage points."),
-    answer("A one unit increase in seat share causes an increase in votes against the government of about 56 percentage points.", correct = F, message = "This would only hold if you assume that there are no confounders, i.e. no unobserved factors that affect both the size of a party in parliament and its behavior vis-a-vis the government. Without randomization or further control variables, this seems not realistic to hold in practice."),
+    answer("A one unit increase in seat share causes an increase in votes against the government of about 56 percentage points.", correct = F, message = "Be careful when making _causal statements_. Saying increases in seat share cause an increase in votes would only hold if you assume that there are no confounders, i.e. no unobserved factors that affect both the size of a party in parliament and its behavior vis-a-vis the government. Without randomization or further control variables, this seems not realistic to hold in practice."),
   answer("An increase of one percentage point in vote share is associated with a an increase of about 0.56 percentage points in the the share of votes against the government.", correct = T),
     answer("We expect an increase of about 56 percentage points in the share of votes against the government when the seat share variable increases by one unit.", correct = T),
   random_answer_order = TRUE,
@@ -187,13 +219,13 @@ question("What does the coefficient estimate tell us about the relationship betw
 
 ```
 
-### Predicted values
+## Predicted values
 
 Not only does the model help us understand how much the share of votes against the government is expected to change when party size increases, but it also allows us to make predictions. 
 
 **According to our model, how often do parties with a seat share of 30% oppose the government on average? Please provide the answer in percent with two significant (non-zero) digits.**
 
-*(Hint: If you stored the regression output in a separate object in the previous task, you are able to access the object here. Alternatively, you can also re-run the regression in this chunk. Note that the predict function might be helpful for this task.)*
+*(Hint: Note that the `predict()` function might be helpful for this task. You can re-run the regression model in the chunk below. Alternatively, the correct regression output is also already stored in an object called `lm_out`)*
 
 ```{r predict_sol, eval = F, echo = F}
 m1 <- lm(conflict_p ~ seatshare, data = df_opposition)
@@ -201,7 +233,12 @@ m1 <- lm(conflict_p ~ seatshare, data = df_opposition)
 predict(m1, newdata = tibble(seatshare = .3)) %>% round(2)*100
 ```
 
-```{r predict, exercise=TRUE, exercise.setup = "lm_1"}
+```{r predict-setup}
+lm_out <- lm(conflict_p ~ seatshare, data = df_opposition)
+```
+
+
+```{r predict, exercise=TRUE, exercise.setup = "predict-setup"}
 
 ```
 
@@ -215,7 +252,7 @@ question_text(
 )
 ```
 
-### Model assumptions
+## Model assumptions
 
 As always, it's important to keep in mind what we are assuming about the models that we run on our data to **infer** what is going on in the real world.
 
@@ -240,8 +277,7 @@ learnrhash::encoder_logic()
 ```
 
 ```{r encode, echo=FALSE}
-learnrhash::encoder_ui(default_ui(url = "https://ilias.uni-mannheim.de/ilias.php?baseClass=ilObjSurveyGUI&ref_id=1094762&cmd=infoScreen
-"))
+learnrhash::encoder_ui(default_ui(url = "SomeURL"))
 ```
 
 
