@@ -41,7 +41,7 @@ grade_this_code("The tidyverse is now loaded!")
 
 ## Presenting numerical data
 
-Before we start working with the data, let's talk about the presentation of numerical data, first. While we can often estimate values of interest with great accuracy with our statistical models (for example, we might find that the average unemployment rate in our data  is 12.489746168764 %), reporting every digit seems unnecessary and not very helpful for our understanding of the labor market situation. Generally speaking,  we face the challenge of finding a **balance between accuracy and readability** when reporting numerical results. Thus, it is recommendable to report what is often referred to as **"meaningful" or "effective" numbers** --- rounded not too much and not too little.^[Cole, TJ. (2015) "Too many digits: the presentation of numerical data". *Archives of Disease in Childhood* 100. 608-609.]
+Before we start working with the data, let's talk about the presentation of numerical data, first. While we can often estimate values of interest with great accuracy with our statistical models (for example, we might find that the average unemployment rate in our data  is 12.489746168764 %), reporting every digit seems unnecessary (and in this case not very helpful for our overall understanding of the labor market situation). Generally speaking,  we face the challenge of finding a **balance between accuracy and readability** when reporting numerical results. Thus, it is recommendable to report what is often referred to as **"meaningful" or "effective" numbers** --- rounded not too much and not too little.^[Cole, TJ. (2015) "Too many digits: the presentation of numerical data". *Archives of Disease in Childhood* 100. 608-609.]
 
 Yet, what is a "meaningful" number in practice? Unfortunately, there are no universal rules and, to make things even more complicated, the rules for using numbers in academic writing that do exist vary among academic disciplines, journals, and style guides (like the *Chicago Manual of Style* or the *APA Style Manual*). 
 
@@ -62,9 +62,15 @@ Here are some examples:
 | 12,546          | $\rightarrow$ 12546        |
 
 
+Two more things:
+
+1. As mentioned before, you may sometimes be specifically asked to round to a specified number of digits *after the decimal*. For example, if you are asked to round 125.10243214 to two (integer) digits after the decimal, please provide 125.10 in the solution.
+
+2. **Percentage values** are often stored as values that are bound between 0 and 1 (instead of 0% and 100%). In these cases, you will generally be required to report estimates in **percent**. For example, the vote share stored in a variable in `R` says 0.12 but refers to percentage values. In this case, please report your final result as 12 %.
+
 ### Rounding numbers in R
 
-Not surprisingly, we can also round numbers in `R`. The main function to round numeric vectors numbers is called `round()` and takes a numeric vector or values as well as the **number of decimal places** to round to as input: 
+Not surprisingly, we can also round numbers in `R`. The main function to round numeric vectors numbers is called `round()` and takes a numeric vector or value as well as the **number of decimal places** to round to as input: 
 
 - `round(x, digits = 0)`: Rounds the values in its first argument (i.e., x) to the specified number of decimal places.
 
@@ -77,10 +83,10 @@ round(189.48615, 1)
 round(189.48615, 2)
 ```
 
-As you can see, you have to bit careful: If you are asked to report to two meaningful numbers, some people may be inclined to use `round(189.48615, 2)`. However, as  189.48615 has more than two digits *before the decimal sign*, we do not need to report decimal places so that `round(189.48615, 0)` is sufficient for our purpose.
+As you can see, you have to be bit careful: If you are asked to report to two meaningful numbers, some people may be inclined to use `round(189.48615, 2)`. However, as  189.48615 has more than two digits *before the decimal sign*, we do not need to report decimal places and `round(189.48615, 0)` is sufficient for our purpose.
 
 
-Let's give it a try yourself! 
+Try it yourself! 
 
 **Please round 89.48615 to two meaningful digits**
 
@@ -97,7 +103,7 @@ round(89.48615, 0)
 
 ```{r round-q, echo = FALSE}
 question("Please round 89.48615 to two meaningful digits:",
-  answer("89", correct = T, message = "As the number has two integer digits 'before' the decimal, you were not required to report digits 'after' the decimal. Thus, using round(89.48615, 0) is doing the job for you."),
+  answer("89", correct = T, message = "As the number has two integer digits 'before' the decimal, you were right not to report digits 'after' the decimal. Thus, using round(89.48615, 0) is doing the job for you."),
   answer("90", correct = F, message = "You rounded to a single 'significant' number which is not accurate enough. Please report the result rounded to two meaningful digits."),
   answer("89.49", correct = F, message = "Too detailed. You rounded to two digits after the decimal. Please round to two meaningful integer numbers."),
   random_answer_order = TRUE,
@@ -106,11 +112,7 @@ question("Please round 89.48615 to two meaningful digits:",
 
 ```
 
-Two more things:
 
-1. As mentioned before, you may sometimes be specifically asked to round to a specified number of digits *after the decimal*. For example, if you are asked to round 125.10243214 to two (integer) digits after the decimal, please provide 125.10 in the solution.
-
-2. **Percentage values** are often stored as values that are bound between 0 and 1 (instead of 0% and 100%). In these cases, you will generally be required to report estimates in **percent**. For example, the vote share stored in a variable in `R` says 0.12 but refers to percentage values. In this case, please report your final result as 12 %.
 
 
 ## Getting to know the data
