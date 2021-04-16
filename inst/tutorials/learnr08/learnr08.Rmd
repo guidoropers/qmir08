@@ -62,16 +62,14 @@ Here are some examples:
 | 12,546          | $\rightarrow$ 12546        |
 
 
-### Rounding numbers in `R`
+### Rounding numbers in R
 
-`R` provides us with two main functions to round numeric vectors numbers:
+Not surprisingly, we can also round numbers in `R`. The main function to round numeric vectors numbers is called `round()` and takes a numeric vector or values as well as the **number of decimal places** to round to as input: 
 
-- `round(x, digits = 0)`: Rounds the values in its first argument (i.e., x) to the specified number of decimal places 
-- `signif(x, digits = 6)`: Rounds the values in its first argument  (i.e., x) to the specified number of significant (= non-zero) digits
+- `round(x, digits = 0)`: Rounds the values in its first argument (i.e., x) to the specified number of decimal places.
 
-It might become more clear if you look at an example number like 189.48615:
+Here is an example using 189.48615 as input:
 
-´round()´:
 
 ```{r round-example}
 round(189.48615, 0)
@@ -79,19 +77,10 @@ round(189.48615, 1)
 round(189.48615, 2)
 ```
 
-`signif()`:
-
-```{r}
-signif(189.48615, 0)
-signif(189.48615, 1)
-signif(189.48615, 2)
-signif(189.48615, 3)
-signif(189.48615, 4)
-```
+As you can see, you have to bit careful: If you are asked to report to two meaningful numbers, some people may be inclined to use `round(189.48615, 2)`. However, as  189.48615 has more than two digits *before the decimal sign*, we do not need to report decimal places so that `round(189.48615, 0)` is sufficient for our purpose.
 
 
-
-Hopefully, you see the differences. For most of your purposes, the `round()` function is the one we need. Let's give it a try! 
+Let's give it a try yourself! 
 
 **Please round 89.48615 to two meaningful digits**
 
