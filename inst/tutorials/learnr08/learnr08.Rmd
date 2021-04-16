@@ -14,6 +14,7 @@ library(learnrhash)
 gradethis::gradethis_setup()
 
 library(tidyverse)
+load("df_opposition.rda")
 data(df_opposition) 
 ```
 
@@ -210,7 +211,7 @@ Please provide an interpretation of the estimated regression coefficient.
 ```{r qlm-1-q, echo = FALSE}
 question("What does the coefficient estimate tell us about the relationship between seat share and the share of opposing votes to the government?",
   answer("A one unit increase in seat share is associated with an increase of about 56% in votes against the government.", correct = F, message = "Keep in mind that reporting increases in percent is a relative measure. However, the dependent variable is measured in percentage points."),
-    answer("A one unit increase in seat share causes an increase in votes against the government of about 56 percentage points.", correct = F, message = "Be careful when making _causal statements_. Saying increases in seat share cause an increase in votes would only hold if you assume that there are no confounders, i.e. no unobserved factors that affect both the size of a party in parliament and its behavior vis-a-vis the government. Without randomization or further control variables, this seems not realistic to hold in practice."),
+    answer("A one unit increase in seat share causes an increase in votes against the government of about 56 percentage points.", correct = F, message = "Be careful when making causal statements. Saying increases in seat share cause an increase in votes would only hold if you assume that there are no confounders, i.e. no unobserved factors that affect both the size of a party in parliament and its behavior vis-a-vis the government. Without randomization or further control variables, this seems not realistic to hold in practice."),
   answer("An increase of one percentage point in vote share is associated with a an increase of about 0.56 percentage points in the the share of votes against the government.", correct = T),
     answer("We expect an increase of about 56 percentage points in the share of votes against the government when the seat share variable increases by one unit.", correct = T),
   random_answer_order = TRUE,
@@ -225,16 +226,16 @@ Not only does the model help us understand how much the share of votes against t
 
 **According to our model, how often do parties with a seat share of 30% oppose the government on average? Please provide the answer in percent with two significant (non-zero) digits.**
 
-*(Hint: Note that the `predict()` function might be helpful for this task. You can re-run the regression model in the chunk below. Alternatively, the correct regression output is also already stored in an object called `lm_out`)*
+*(Hint: Note that the `predict()` function might be helpful for this task. You can re-run the regression model in the chunk below. Alternatively, the correct regression output is also already stored in an object called `lm_seatshare`)*
 
 ```{r predict_sol, eval = F, echo = F}
-m1 <- lm(conflict_p ~ seatshare, data = df_opposition)
+lm_seatshare <- lm(conflict_p ~ seatshare, data = df_opposition)
 
-predict(m1, newdata = tibble(seatshare = .3)) %>% round(2)*100
+predict(lm_seatshare, newdata = tibble(seatshare = .3)) %>% round(2)*100
 ```
 
 ```{r predict-setup}
-lm_out <- lm(conflict_p ~ seatshare, data = df_opposition)
+lm_seatshare <- lm(conflict_p ~ seatshare, data = df_opposition)
 ```
 
 
@@ -250,23 +251,6 @@ question_text(
   answer("0.66", correct = F, message = "Please provide the answer in percent."),
   allow_retry = T
 )
-```
-
-## Model assumptions
-
-As always, it's important to keep in mind what we are assuming about the models that we run on our data to **infer** what is going on in the real world.
-
-```{r assumptions_q1, echo = FALSE}
-question("Which key assumption is required to interpret the relationship from a linear model as causal?",
-  answer("Unobserved factors have an average of zero and do not depend on the explanatory variable.", correct = T),
-  answer("The parameters are linear."),
-  answer("There is a correlation between the dependent and independent variables."),
-  answer("There is no measurement error in the dependent variable."),
-  random_answer_order = TRUE,
-  allow_retry = T,
-  incorrect = "Hint: Have a look at the slides and think about the error."
-)
-
 ```
 
 
