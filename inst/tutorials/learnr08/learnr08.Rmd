@@ -61,7 +61,7 @@ dim(df_opposition)
 question_text("Enter the number of observations here:",
   answer("54", correct = T),
   allow_retry = T,
-  incorrect = "Hint: Try ndim() or nrow()."
+  incorrect = "Hint: Try dim(), nrow(), or glimpse()."
 )
 
 ```
@@ -71,7 +71,7 @@ question_text("Enter the number of observations here:",
 question_text("Enter the number of variables here:",
   answer("17", correct = T),
   allow_retry = T,
-  incorrect = "Hint: Try ndim() or ncol()."
+  incorrect = "Hint: Try dim(), ncol(), or glimpse()."
 )
 
 ```
@@ -146,7 +146,7 @@ ggplot(df_opposition) +
 ```
  
 ```{r histogram-code-check}
-grade_code()
+grade_this_code()
 ```
 
 #### Summary statistics
