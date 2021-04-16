@@ -19,7 +19,7 @@ data(df_opposition)
 
 ## Introduction
 
-After getting to know `R` and the `tidyverse` in previous weeks, it's now time to run your first statistical model. Following this week's lab session, you continue wondering why opposition parties in European national parliaments vary in their conflict-seeking behavior. Luckily, we have the data from Tuttnauer (2018) which allows us to explore the behavior of parliamentary opposition parties in 16 EU member states.^[Tuttnauer, O. (2018) "If you can beat them, confront them: Party-level analysis of opposition behavior in European national parliaments". *European Union Politics*, 19(2), 278–298.] 
+After you got to know `R` and the `tidyverse` in previous weeks, it's now time to run your first statistical model. Following this week's lab session, you continue wondering why opposition parties in European national parliaments vary in their conflict-seeking behavior. Luckily, we have the data from Tuttnauer (2018) which allows us to explore the behavior of parliamentary opposition parties in 16 EU member states.^[Tuttnauer, O. (2018) "If you can beat them, confront them: Party-level analysis of opposition behavior in European national parliaments". *European Union Politics*, 19(2), 278–298.] 
 
 Before doing so, however, you have to load the required packages. Moreover, you should also familiarize yourself with the data first. 
 
@@ -39,30 +39,76 @@ library(tidyverse)
 grade_this_code("The tidyverse is now loaded!")
 ```
 
-## Presenting meaningful numerical data
+## Presenting numerical data
 
-Before we start working with the data, let's quickly talk about the presentation of numerical data. While we can often estimate values of interest with great accuracy (for example, we might find that the average unemployment rate of a country is 5.489746168764 % ), reporting every digit seems unnecessary and not very helpful for our understanding of the labor market situation in this country. Put differently,  we face the challenge of finding a balance between accuracy and readability when reporting results. Thus, it is recommendable to report what is often referred to as "meaningful"/"significant"/"effective" numbers --- rounded not too much and not too little.^[Cole, TJ. (2015) "Too many digits: the presentation of numerical data". *Archives of Disease in Childhood* 100. 608-609.]
+Before we start working with the data, let's talk about the presentation of numerical data, first. While we can often estimate values of interest with great accuracy with our statistical models (for example, we might find that the average unemployment rate in our data  is 12.489746168764 %), reporting every digit seems unnecessary and not very helpful for our understanding of the labor market situation in this country. Put differently,  we face the challenge of finding a **balance between accuracy and readability** when reporting results. Thus, it is recommendable to report what is often referred to as **"meaningful"/"significant"/"effective" numbers** --- rounded not too much and not too little.^[Cole, TJ. (2015) "Too many digits: the presentation of numerical data". *Archives of Disease in Childhood* 100. 608-609.]
 
 Yet, what is a "meaningful" number in practice? Unfortunately, there are no universal rules and, to make things even more complicated, the rules for using numbers in academic writing that do exist vary among academic disciplines, journals, and style guides (like the *Chicago Manual of Style* or the *APA Style Manual*). 
 
-For this tutorial (and the weeks to come), you will generally be required to round numbers to two integer numbers (integer numbers are positive and negative natural numbers as well as zero: *...-2,-1,0,1,2...*). 
+For this tutorial (and the weeks to come), you will generally be required to round numbers to **two integer numbers** (integer numbers are positive and negative natural numbers as well as zero: *...-2,-1,0,1,2...*). 
 
 One main exception are numbers with more than two digits *before the decimal sign* (for example, 1564.5464). In that case, please provide the whole number without digits after the decimal (unless you are specifically asked to). 
 
 Here are some examples:
 
-0.23444 $\rightarrow$ 0.23
-4.021 $\rightarrow$ 4.0
-4.52861 $\rightarrow$ 4.5
-13.1248 $\rightarrow$ 13
-125.1 $\rightarrow$ 125
-125 $\rightarrow$ 125
-12,546 $\rightarrow$ 12546
+| Original value  | Reported value             |
+|-----------------|----------------------------|
+| 0.23444         | $\rightarrow$ 0.23         |
+| 4.021           | $\rightarrow$ 4.0          |
+| 4.52861         | $\rightarrow$ 4.5          |
+| 13.1248         | $\rightarrow$ 13           |
+| 125.1           | $\rightarrow$ 125          |
+| 125             | $\rightarrow$ 125          |
+| 12,546          | $\rightarrow$ 12546        |
 
-As mentioned before, you may sometimes be specifically asked to round to a specified number of digits *after the decimal*. For example, if you are asked to round 125.10243214 to two (integer) digits after the decimal, please provide 125.10 in the solution.
+`R` provides us with two main functions to round numeric vectors numbers:
 
-**Note:** Percentage values are often stored as values that are bound between 0 and 1 (instead of 0% and 100%). In these cases, you will generally be required to report estimates in **percent**. 
+- `round(x, digits = 0)`: Rounds the values in its first argument (i.e., x) to the specified number of decimal places 
+- `signif(x, digits = 0)`: Rounds the values in its first argument  (i.e., x) to the specified number of significant (= non-zero) digits
 
+It might become more clear if you look at an example number like $189.48615$:
+
+```{r round-example}
+round(189.48615, 0)
+round(189.48615, 1)
+round(189.48615, 2)
+signif(189.48615, 0)
+signif(189.48615, 1)
+signif(189.48615, 2)
+signif(189.48615, 3)
+```
+
+Hopefully, you see the differences. In most of your cases, the `round()` function is the one we need for our purposes. Let's give it a try! 
+
+**Please round 89.48615 to two meaningful digits**
+
+```{r round-sol,echo = FALSE, eval=FALSE}
+round(89.48615, 0)
+```
+
+
+```{r round, exercise = TRUE}
+
+```
+
+
+
+```{r round-q, echo = FALSE}
+question("Please round 89.48615 to two meaningful digits:",
+  answer("89", correct = T),
+  answer("90", correct = F, message = "You rounded to a single 'significant' number which is not accurate enough. Please report the result rounded to two meaningful digits."),
+  answer("89.49", correct = F, message = "Too detailed as you provided two digits after the decimal."),
+  random_answer_order = TRUE,
+  allow_retry = T
+)
+
+```
+
+Two more things:
+
+**Note:** As mentioned before, you may sometimes be specifically asked to round to a specified number of digits *after the decimal*. For example, if you are asked to round 125.10243214 to two (integer) digits after the decimal, please provide 125.10 in the solution.
+
+**Note:** **Percentage values** are often stored as values that are bound between 0 and 1 (instead of 0% and 100%). In these cases, you will generally be required to report estimates in **percent**. 
 
 
 ## Getting to know the data
