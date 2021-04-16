@@ -139,7 +139,7 @@ One common argument in the literature on opposition parties is that larger oppos
 
 ```
 
-```{r histogram-solution}
+```{r histogram-sol}
 ggplot(df_opposition) + 
   geom_histogram(aes(x = seatshare)) + 
   theme_minimal() 
