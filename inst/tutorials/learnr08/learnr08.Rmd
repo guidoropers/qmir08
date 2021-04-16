@@ -11,7 +11,7 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(learnrhash)
-gradethis::gradethis_setup()
+gradethis::gradethis_setup(exercise.reveal_solution = FALSE)
 
 library(tidyverse)
 data(df_opposition) 
@@ -39,9 +39,35 @@ library(tidyverse)
 grade_this_code("The tidyverse is now loaded!")
 ```
 
+## Presenting meaningful numerical data
+
+Before we start working with the data, let's quickly talk about the presentation of numerical data. While we can often estimate values of interest with great accuracy (for example, we might find that the average unemployment rate of a country is 5.489746168764 % ), reporting every digit seems unnecessary and not very helpful for our understanding of the labor market situation in this country. Put differently,  we face the challenge of finding a balance between accuracy and readability when reporting results. Thus, it is recommendable to report what is often referred to as "meaningful"/"significant"/"effective" numbers --- rounded not too much and not too little.^[Cole, TJ. (2015) "Too many digits: the presentation of numerical data". *Archives of Disease in Childhood* 100. 608-609.]
+
+Yet, what is a "meaningful" number in practice? Unfortunately, there are no universal rules and, to make things even more complicated, the rules for using numbers in academic writing that do exist vary among academic disciplines, journals, and style guides (like the *Chicago Manual of Style* or the *APA Style Manual*). 
+
+For this tutorial (and the weeks to come), you will generally be required to round numbers to two integer numbers (integer numbers are positive and negative natural numbers as well as zero: *...-2,-1,0,1,2...*). 
+
+One main exception are numbers with more than two digits *before the decimal sign* (for example, 1564.5464). In that case, please provide the whole number without digits after the decimal (unless you are specifically asked to). 
+
+Here are some examples:
+
+0.23444 $\rightarrow$ 0.23
+4.021 $\rightarrow$ 4.0
+4.52861 $\rightarrow$ 4.5
+13.1248 $\rightarrow$ 13
+125.1 $\rightarrow$ 125
+125 $\rightarrow$ 125
+12,546 $\rightarrow$ 12546
+
+As mentioned before, you may sometimes be specifically asked to round to a specified number of digits *after the decimal*. For example, if you are asked to round 125.10243214 to two (integer) digits after the decimal, please provide 125.10 in the solution.
+
+**Note:** Percentage values are often stored as values that are bound between 0 and 1 (instead of 0% and 100%). In these cases, you will generally be required to report estimates in **percent**. 
+
+
+
 ## Getting to know the data
 
-As mentioned before, the data for this tutorial is the same data on opposition parties in national European parliaments that we used in the lab. The data set is already preloaded into the environment and called `df_opposition`. Let's check it out.
+Now it's time to get started with the data. As mentioned before, the data for this tutorial is the same data on opposition parties in national European parliaments that we used in the lab. The data set is already preloaded into the environment and called `df_opposition`. Let's check it out.
 
 ### The data set
 
@@ -100,7 +126,7 @@ question("The median  of the conflict measure is (in percent and rounded to two 
   answer("0.5", correct = F, message = "Please report the result in percent and rounded to two digits."),
   answer("0.54", correct = F, message = "Close but remember that you are supposed to report the median in percent."),
   answer("0.054", correct = F, message = "Please report the result in percent and rounded to two digits."),
-  answer("50", correct = F, message = "Please report the result rounded to two meaningful (non-zero) digits."),
+  answer("50", correct = F, message = "Please report the result rounded to two meaningful digits."),
   answer("53.68", correct = F, message = "Not wrong per se, but too detailed."),
   random_answer_order = TRUE,
   allow_retry = T
@@ -139,7 +165,7 @@ One common argument in the literature on opposition parties is that larger oppos
 
 ```
 
-```{r histogram-sol}
+```{r histogram-solution}
 ggplot(df_opposition) + 
   geom_histogram(aes(x = seatshare)) + 
   theme_minimal() 
@@ -149,11 +175,15 @@ ggplot(df_opposition) +
 grade_this_code()
 ```
 
+<div id="histogram-hint">
+**Hint:** Have you (correctly) specified the data and the mappings? The geometric object for creating a histogram is `geom_histogram()`.
+</div>
+
 #### Summary statistics
 
 Now that you got a first visual glimpse at the explanatory variable, let's calculate some summary statistics.
 
-**What is the average value of `seatshare` in the data (in percent and rounded to two non-zero digits)?**
+**What is the average value of `seatshare` in the data (in percent and rounded to two meaningful digits)?**
 
 ```{r avg-seatshare-sol, eval=FALSE, echo = FALSE}
 mean(df_opposition$seatshare) %>% round(2)*100
@@ -246,7 +276,7 @@ lm_seatshare <- lm(conflict_p ~ seatshare, data = df_opposition)
 question_text(
   "Parties with a seat share of 30% oppose the government on average in __ percent of votes.",
   answer("66", correct = T),
-  answer("65.61", correct = F, message = "That is too detailed."),
+  answer("65.61", correct = F, message = "That is too detailed. Please round the result to two meaningful digits."),
   answer("0.66", correct = F, message = "Please provide the answer in percent."),
   allow_retry = T
 )
