@@ -14,6 +14,7 @@ library(learnrhash)
 gradethis::gradethis_setup(exercise.reveal_solution = FALSE)
 
 library(tidyverse)
+library(qmir08)
 data(df_opposition) 
 ```
 
