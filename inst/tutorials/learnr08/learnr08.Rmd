@@ -337,7 +337,7 @@ question_text(
 ## Submit
 
 ```{r context="server"}
-learnrhash::encoder_logic()
+learnrhash::encoder_logic(strip_output = TRUE)
 ```
 
 ```{r encode, echo=FALSE}
